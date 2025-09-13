@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stack Visualization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #ffe6f0;
+    }
+    h1 {
+      color: #e60073;
+    }
+    .stack-container {
+      margin: 20px auto;
+      width: 200px;
+      min-height: 300px;
+      border: 2px solid #e60073;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      padding: 10px;
+      background: white;
+    }
+    .element {
+      width: 150px;
+      height: 40px;
+      margin: 5px;
+      background: #e60073;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #e60073;
+      color: white;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #cc0052;
+    }
+    pre {
+      text-align: left;
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      max-width: 90%;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Stack Visualization</h1>
+
+  <!-- Stack size input -->
+  <label for="stackSize">Enter stack size:</label>
+  <input type="number" id="stackSize" value="5" min="1" max="20">
+  <button onclick="setSize()">Set Size</button>
+
+  <div class="stack-container" id="stack"></div>
+
+  <!-- Add this input before buttons -->
+<input type="number" id="stackValue" placeholder="Enter value">
+<button onclick="pushElement()">Push</button>
+<button onclick="popElement()">Pop</button>
+<button onclick="displayStack()">Display</button>
+<button onclick="showPseudocode()">Show Pseudocode</button>
+<button onclick="location.href='index.html'">🏠 Back to Home</button>
+
+  <div id="message"></div>
+  <pre id="pseudocode" style="display:none;"></pre>
+
+  <script>
+    let stack = [];
+    let maxSize = 5;
+
+    function setSize() {
+      const input = document.getElementById("stackSize").value;
+      maxSize = parseInt(input);
+      stack = [];
+      document.getElementById("stack").innerHTML = "";
+      document.getElementById("message").innerText = "Stack size set to " + maxSize;
+    }
+
+    function isFull() {
+      return stack.length >= maxSize;
+    }
+
+    function isEmpty() {
+      return stack.length === 0;
+    }
+
+   function pushElement() {
+  if (isFull()) {
+    document.getElementById("message").innerText = "⚠️ Stack Overflow!";
+    return;
+  }
+  let input = document.getElementById("stackValue").value;
+  let value = input ? parseInt(input) : Math.floor(Math.random() * 100);
+  stack.push(value);
+  updateStack();
+  document.getElementById("message").innerText = "✅ Inserted " + value;
+  document.getElementById("stackValue").value = ""; // clear input
+}
+
+    function popElement() {
+      if (isEmpty()) {
+        document.getElementById("message").innerText = "⚠️ Stack Underflow!";
+        return;
+      }
+      let removed = stack.pop();
+      updateStack();
+      document.getElementById("message").innerText = "🗑️ Removed " + removed;
+    }
+
+    function displayStack() {
+      if (isEmpty()) {
+        document.getElementById("message").innerText = "⚠️ Stack is Empty!";
+      } else {
+        document.getElementById("message").innerText = "📦 Stack: " + stack.join(", ");
+      }
+    }
+
+    function updateStack() {
+      const container = document.getElementById("stack");
+      container.innerHTML = "";
+      stack.forEach(value => {
+        const element = document.createElement("div");
+        element.className = "element";
+        element.innerText = value;
+        container.appendChild(element);
+      });
+    }
+
+    function showPseudocode() {
+      const code = `
+#include <iostream>
+using namespace std;
+
+int n;
+int top = -1;
+int stack[100];
+
+void push(int value) {
+    if (top >= n - 1) {
+        cout << "Stack overflowed!!";
+    } else {
+        top++;
+        stack[top] = value;
+        cout << "Inserted " << value;
+    }
+}
+
+void pop() {
+    if (top <= -1) {
+        cout << "Stack underflowed!!";
+    } else {
+        cout << "Removed element: " << stack[top];
+        top--;
+    }
+}
+
+void display() {
+    if (top >= 0) {
+        for (int i = top; i >= 0; i--) {
+            cout << stack[i] << " ";
+        }
+    } else {
+        cout << "Stack is empty!!";
+    }
+}
+      `;
+      const pseudoBox = document.getElementById("pseudocode");
+      pseudoBox.style.display = "block";
+      pseudoBox.innerText = code;
+    }
+  </script>
+</body>
+</html>

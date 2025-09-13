@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Visualization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #e6f7ff;
+    }
+    h1 {
+      color: #006699;
+    }
+    .queue-container {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 500px;
+      min-height: 100px;
+      border: 2px solid #006699;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      padding: 10px;
+      background: white;
+    }
+    .element {
+      width: 60px;
+      height: 60px;
+      margin: 5px;
+      background: #006699;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #006699;
+      color: white;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #004466;
+    }
+    pre {
+      text-align: left;
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      max-width: 90%;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Queue Visualization</h1>
+
+  <!-- Queue size input -->
+  <label for="queueSize">Enter queue size:</label>
+  <input type="number" id="queueSize" value="5" min="1" max="20">
+  <button onclick="setSize()">Set Size</button>
+
+  <div class="queue-container" id="queue"></div>
+
+  <!-- Add this input before buttons -->
+<input type="number" id="queueValue" placeholder="Enter value">
+<button onclick="enqueue()">Enqueue</button>
+<button onclick="dequeue()">Dequeue</button>
+<button onclick="displayQueue()">Display</button>
+<button onclick="showPseudocode()">Show Pseudocode</button>
+<button onclick="location.href='index.html'">🏠 Back to Home</button>
+
+
+  <div id="message"></div>
+  <pre id="pseudocode" style="display:none;"></pre>
+
+  <script>
+    let queue = [];
+    let maxSize = 5;
+
+    function setSize() {
+      const input = document.getElementById("queueSize").value;
+      maxSize = parseInt(input);
+      queue = [];
+      document.getElementById("queue").innerHTML = "";
+      document.getElementById("message").innerText = "Queue size set to " + maxSize;
+    }
+
+    function isFull() {
+      return queue.length >= maxSize;
+    }
+
+    function isEmpty() {
+      return queue.length === 0;
+    }
+
+   function enqueue() {
+  if (isFull()) {
+    document.getElementById("message").innerText = "⚠️ Queue Overflow!";
+    return;
+  }
+  let input = document.getElementById("queueValue").value;
+  let value = input ? parseInt(input) : Math.floor(Math.random() * 100);
+  queue.push(value);
+  updateQueue();
+  document.getElementById("message").innerText = "✅ Enqueued " + value;
+  document.getElementById("queueValue").value = ""; // clear input
+}
+
+    function dequeue() {
+      if (isEmpty()) {
+        document.getElementById("message").innerText = "⚠️ Queue Underflow!";
+        return;
+      }
+      let removed = queue.shift();
+      updateQueue();
+      document.getElementById("message").innerText = "🗑️ Dequeued " + removed;
+    }
+
+    function displayQueue() {
+      if (isEmpty()) {
+        document.getElementById("message").innerText = "⚠️ Queue is Empty!";
+      } else {
+        document.getElementById("message").innerText = "📦 Queue: " + queue.join(", ");
+      }
+    }
+
+    function updateQueue() {
+      const container = document.getElementById("queue");
+      container.innerHTML = "";
+      queue.forEach(value => {
+        const element = document.createElement("div");
+        element.className = "element";
+        element.innerText = value;
+        container.appendChild(element);
+      });
+    }
+
+    function showPseudocode() {
+      const code = `
+#include <iostream>
+using namespace std;
+
+int n, front = -1, rear = -1;
+int queue[100];
+
+void enqueue(int value) {
+    if (rear == n - 1) {
+        cout << "Queue Overflow!";
+    } else {
+        if (front == -1) front = 0;
+        rear++;
+        queue[rear] = value;
+        cout << "Inserted " << value;
+    }
+}
+
+void dequeue() {
+    if (front == -1 || front > rear) {
+        cout << "Queue Underflow!";
+    } else {
+        cout << "Removed element: " << queue[front];
+        front++;
+    }
+}
+
+void display() {
+    if (front == -1) {
+        cout << "Queue is Empty!";
+    } else {
+        for (int i = front; i <= rear; i++) {
+            cout << queue[i] << " ";
+        }
+    }
+}
+      `;
+      const pseudoBox = document.getElementById("pseudocode");
+      pseudoBox.style.display = "block";
+      pseudoBox.innerText = code;
+    }
+  </script>
+</body>
+</html>

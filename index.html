@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Project - Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f9f0ff;
+    }
+    h1 {
+      color: #6600cc;
+      margin-top: 30px;
+    }
+    p {
+      color: #333;
+    }
+    .btn-container {
+      margin: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #6600cc;
+      color: white;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #4b0099;
+    }
+    pre {
+      text-align: left;
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      max-width: 90%;
+      margin: 20px auto;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Stack & Queue Visualization</h1>
+  <p>Welcome! Choose an option below to explore animations and pseudocode:</p>
+
+  <div class="btn-container">
+    <button onclick="location.href='stack.html'">📚 Stack</button>
+    <button onclick="location.href='queue.html'">📦 Queue</button>
+  </div>
+
+  <button onclick="toggleCode()">📄 Show Reference Codes</button>
+  <pre id="refCode">
+----- Stack Pseudocode -----
+push(value):
+  if stack is full -> overflow
+  else -> top++, stack[top] = value
+
+pop():
+  if stack empty -> underflow
+  else -> top--
+
+display():
+  print elements from top to bottom
+
+
+----- Queue Pseudocode -----
+enqueue(value):
+  if queue full -> overflow
+  else -> rear++, queue[rear] = value
+
+dequeue():
+  if queue empty -> underflow
+  else -> front++
+
+display():
+  print elements from front to rear
+  </pre>
+
+  <script>
+    function toggleCode() {
+      const ref = document.getElementById("refCode");
+      ref.style.display = ref.style.display === "block" ? "none" : "block";
+    }
+  </script>
+</body>
+</html>
